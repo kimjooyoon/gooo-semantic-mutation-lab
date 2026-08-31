@@ -1,0 +1,37 @@
+{
+  "schema": "gooo/semantic-mutation-lab/development-provenance/v1",
+  "repository": "github.com/kimjooyoon/gooo-semantic-mutation-lab",
+  "scope": "canonical semantic mutation lab implementation only",
+  "owner_thread_id": "01a0558a-d2a9-7e42-8bae-3f5e34155c29",
+  "bootstrap": {
+    "concurrent_bootstrap_writer_count": 1,
+    "concurrent_bootstrap_writer_thread_id": "01a0558a-024e-7c60-9714-ffa16896e44b",
+    "stopped_before_canonical_integration": true,
+    "no_post_receipt_unexpected_changes": true,
+    "conflict_recovery_receipt": "conflict-recovery-receipt.json"
+  },
+  "local_go_command_counts": {
+    "gofmt": 0,
+    "go_build": 0,
+    "go_test": 0,
+    "go_vet": 0
+  },
+  "remote_ci_authority": {
+    "workflow": ".github/workflows/conformance.yml",
+    "go_version": "go1.27.0",
+    "main_run_id": 33350884512,
+    "gofmt_executions": 1,
+    "go_build_executions": 1,
+    "go_test_executions": 1,
+    "go_vet_executions": 1,
+    "conformance_executions": 1,
+    "repository_writes": 0,
+    "local_test_executions": 0,
+    "cross_project_required_gates": 0
+  },
+  "measurement_basis": [
+    "Local Go commands were intentionally not run in the canonical task workspace.",
+    "GitHub Actions is the validation authority for formatting, vet, tests, build, and conformance.",
+    "The concurrent writer count records the one duplicate bootstrap task observed before ownership-receipt integration."
+  ]
+}
