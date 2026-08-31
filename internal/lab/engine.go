@@ -69,10 +69,10 @@ func BaselineState(ir IR) SemanticState {
 		state.Decisions[cell.ID] = "CLOSED"
 		state.Claims[cell.ID] = Claim{State: "CLOSED", Stage: "BASELINE", Step: "declare_cell", Reason: "BASELINE_CELL_DECLARED", BlockedBy: []string{}}
 		state.Evidence[cell.ID] = Evidence{
-			SubjectDigest:  ir.SourceDigest,
-			ContractDigest: ir.ContractDigest,
+			SubjectDigest:   ir.SourceDigest,
+			ContractDigest:  ir.ContractDigest,
 			ToolchainDigest: DigestBytes([]byte("go1.27-ci-only")),
-			CommandDigest:  DigestBytes([]byte("semantic-mutation-lab-ci-only")),
+			CommandDigest:   DigestBytes([]byte("semantic-mutation-lab-ci-only")),
 		}
 	}
 	for _, mutation := range ir.Mutations {
