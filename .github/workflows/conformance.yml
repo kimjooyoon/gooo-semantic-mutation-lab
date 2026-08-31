@@ -70,7 +70,7 @@ jobs:
             .decision == "SEMANTIC_MUTATION_CONFORMANCE_REPORTED" and
             .fixed_conformance_denominator == 12 and
             .summary == {generated:12,attempted:12,killed:10,unknown:1,refuted:1} and
-            .authority == {repository_writes:0,local_test_executions:0,cross_project_required_gates:0,root_readme_policy:"EXCLUDED_FROM_REPOSITORY_INVENTORY"} and
+            .authority == {repository_writes:0,local_test_executions:0,cross_project_required_gates:0,product_generation_authorized:false,root_readme_policy:"EXCLUDED_FROM_REPOSITORY_INVENTORY"} and
             .precedence == ["REFUTED","UNKNOWN","CLOSED"] and
             .improvement.state == "UNKNOWN" and
             .improvement.reason == "EXACT_BEFORE_AFTER_IMPROVEMENT_PAIR_NOT_PROVIDED" and
