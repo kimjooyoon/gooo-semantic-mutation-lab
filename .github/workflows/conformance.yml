@@ -41,24 +41,25 @@ jobs:
         run: go test ./...
 
       - name: Verify build
-        run: go build -trimpath -o "$RUNNER_TEMP/gooo-semantic-mutation-lab" ./cmd/gooo-semantic-mutation-lab
+        run: go build -trimpath -o "$RUNNER_TEMP/gooo-semantic-mutation-lab-bin" ./cmd/gooo-semantic-mutation-lab
 
       - name: Run source to IR to mutant artifacts to report
         shell: bash
         run: |
           set -euo pipefail
-          work="$RUNNER_TEMP/gooo-semantic-mutation-lab"
+          bin="$RUNNER_TEMP/gooo-semantic-mutation-lab-bin"
+          work="$RUNNER_TEMP/gooo-semantic-mutation-lab-work"
           mkdir -p "$work/first" "$work/replay"
           source=examples/semantic-mutation-lab-v1/lab.gooo
           contract=contracts/denominator-v1.json
           before=$(git status --porcelain=v1 -z --untracked-files=all | sha256sum | awk '{print $1}')
 
-          "$RUNNER_TEMP/gooo-semantic-mutation-lab" run \
+          "$bin" run \
             --source "$source" --contract "$contract" --out "$work/first"
           after=$(git status --porcelain=v1 -z --untracked-files=all | sha256sum | awk '{print $1}')
           test "$before" = "$after"
 
-          "$RUNNER_TEMP/gooo-semantic-mutation-lab" run \
+          "$bin" run \
             --source "$source" --contract "$contract" --out "$work/replay"
           cmp -s "$work/first/ir.json" "$work/replay/ir.json"
           cmp -s "$work/first/mutation-report.json" "$work/replay/mutation-report.json"
@@ -88,7 +89,7 @@ jobs:
           test "$(find "$work/first/mutants" -type f -name '*.json' | wc -l | tr -d ' ')" = 12
 
           forbidden="$GITHUB_WORKSPACE/.gooo-semantic-mutation-lab-forbidden-output"
-          if "$RUNNER_TEMP/gooo-semantic-mutation-lab" run \
+          if "$bin" run \
             --source "$source" --contract "$contract" --out "$forbidden"; then
             echo "repository-owned output was accepted" >&2
             exit 1
@@ -96,11 +97,11 @@ jobs:
           test ! -e "$forbidden"
 
       - name: Publish human-facing exact-count summary
-        run: cat "$RUNNER_TEMP/gooo-semantic-mutation-lab/first/mutation-report.md" >> "$GITHUB_STEP_SUMMARY"
+        run: cat "$RUNNER_TEMP/gooo-semantic-mutation-lab-work/first/mutation-report.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload machine and human evidence
         uses: actions/upload-artifact@v4
         with:
           name: gooo-semantic-mutation-lab-evidence-${{ github.run_id }}
-          path: ${{ runner.temp }}/gooo-semantic-mutation-lab/first
+          path: ${{ runner.temp }}/gooo-semantic-mutation-lab-work/first
           if-no-files-found: error
