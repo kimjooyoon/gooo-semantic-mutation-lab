@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kimjooyoon/gooo-semantic-mutation-lab/blob/v0.1.0/schemas/semantic-mutation-lab-v1.schema.json",
+  "title": "Gooo Semantic Mutation Lab v1 report",
+  "type": "object",
+  "required": ["schema", "decision", "fixed_conformance_denominator", "source_digest", "contract_digest", "ir_digest", "precedence", "authority", "summary", "mutants", "improvement"],
+  "properties": {
+    "schema": {"const": "gooo/semantic-mutation-lab/report/v1"},
+    "decision": {"const": "SEMANTIC_MUTATION_CONFORMANCE_REPORTED"},
+    "fixed_conformance_denominator": {"const": 12},
+    "source_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "contract_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "ir_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "precedence": {"const": ["REFUTED", "UNKNOWN", "CLOSED"]},
+    "authority": {
+      "type": "object",
+      "required": ["repository_writes", "local_test_executions", "cross_project_required_gates", "product_generation_authorized"],
+      "properties": {
+        "repository_writes": {"const": 0},
+        "local_test_executions": {"const": 0},
+        "cross_project_required_gates": {"const": 0},
+        "product_generation_authorized": {"const": false},
+        "root_readme_policy": {"const": "EXCLUDED_FROM_REPOSITORY_INVENTORY"}
+      },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "required": ["generated", "attempted", "killed", "unknown", "refuted"],
+      "properties": {
+        "generated": {"const": 12},
+        "attempted": {"const": 12},
+        "killed": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0},
+        "refuted": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "mutants": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": ["mutant_id", "family", "cell", "state", "changed_semantic_edge", "expected_detector", "observed_detector", "artifact_digest", "claim"],
+        "properties": {
+          "mutant_id": {"type": "string"},
+          "family": {"type": "string"},
+          "cell": {"type": "string"},
+          "state": {"enum": ["KILLED", "SURVIVED_UNKNOWN", "INVALID_REFUTED"]},
+          "changed_semantic_edge": {"type": "string"},
+          "expected_detector": {"type": "string"},
+          "observed_detector": {"type": "string"},
+          "artifact_digest": {"type": "string", "pattern": "^sha256:.+"},
+          "claim": {"$ref": "#/$defs/claim"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "improvement": {"$ref": "#/$defs/claim"}
+  },
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "required": ["state", "stage", "step", "reason", "unknown_class", "next_operation", "blocked_by", "before_digest", "after_digest"],
+      "properties": {
+        "state": {"enum": ["CLOSED", "UNKNOWN", "REFUTED", "KILLED"]},
+        "stage": {"type": "string"},
+        "step": {"type": "string"},
+        "reason": {"type": "string"},
+        "unknown_class": {"type": "string"},
+        "next_operation": {"type": "string"},
+        "blocked_by": {"type": "array", "items": {"type": "string"}},
+        "before_digest": {"type": "string"},
+        "after_digest": {"type": "string"}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {"if": {"properties": {"state": {"const": "UNKNOWN"}}}, "then": {"properties": {"stage": {"minLength": 1}, "step": {"minLength": 1}, "reason": {"minLength": 1}, "unknown_class": {"minLength": 1}, "next_operation": {"minLength": 1}}}}
+      ]
+    }
+  },
+  "additionalProperties": false
+}

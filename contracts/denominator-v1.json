@@ -1,0 +1,35 @@
+{
+  "schema": "gooo/semantic-mutation-lab/denominator/v1",
+  "id": "semantic-mutation-lab-v1",
+  "version": "v1",
+  "cell_count": 12,
+  "fixed": true,
+  "cells": [
+    {"ordinal": 1, "id": "SELF_ATTESTATION", "semantic_edge": "attestation:independent->evaluator", "depends_on": []},
+    {"ordinal": 2, "id": "FIXED_POINT_GUARD", "semantic_edge": "decision:fixed_point->evaluator", "depends_on": ["SELF_ATTESTATION"]},
+    {"ordinal": 3, "id": "UNKNOWN_TUPLE", "semantic_edge": "claim:unknown->resolution", "depends_on": ["FIXED_POINT_GUARD"]},
+    {"ordinal": 4, "id": "DENOMINATOR_IMMUTABILITY", "semantic_edge": "denominator:declared->run", "depends_on": ["UNKNOWN_TUPLE"]},
+    {"ordinal": 5, "id": "AUTHORITY_BOUNDARY", "semantic_edge": "authority:zero->operation", "depends_on": ["DENOMINATOR_IMMUTABILITY"]},
+    {"ordinal": 6, "id": "EVIDENCE_FRESHNESS", "semantic_edge": "evidence:current->evaluation", "depends_on": ["AUTHORITY_BOUNDARY"]},
+    {"ordinal": 7, "id": "ARTIFACT_DIGEST", "semantic_edge": "artifact:bytes->digest", "depends_on": ["EVIDENCE_FRESHNESS"]},
+    {"ordinal": 8, "id": "DEPENDENCY_EDGE", "semantic_edge": "cell:predecessor->successor", "depends_on": ["ARTIFACT_DIGEST"]},
+    {"ordinal": 9, "id": "SOURCE_IR_BINDING", "semantic_edge": "source:semantic->ir", "depends_on": ["DEPENDENCY_EDGE"]},
+    {"ordinal": 10, "id": "ARTIFACT_IDENTITY", "semantic_edge": "ir:mutant->artifact", "depends_on": ["SOURCE_IR_BINDING"]},
+    {"ordinal": 11, "id": "UNKNOWN_FRONTIER", "semantic_edge": "dependency:frontier->unknown", "depends_on": ["ARTIFACT_IDENTITY"]},
+    {"ordinal": 12, "id": "REFUTATION_PRECEDENCE", "semantic_edge": "refuted:priority->unknown", "depends_on": ["UNKNOWN_FRONTIER"]}
+  ],
+  "families": [
+    {"ordinal": 1, "id": "MUT-01-SELF-ATTESTATION", "family": "SELF_ATTESTATION", "cell": "SELF_ATTESTATION", "changed_semantic_edge": "attestation:independent->mutant-self", "operator": "replace_independent_attestation", "expected_detector": "SELF_ATTESTATION_NOT_AUTHORITY"},
+    {"ordinal": 2, "id": "MUT-02-FIXED-POINT", "family": "FIXED_POINT_ABUSE", "cell": "FIXED_POINT_GUARD", "changed_semantic_edge": "decision:closed->fixed_point", "operator": "replace_decision_with_fixed_point", "expected_detector": "FIXED_POINT_DECISION_REJECTED"},
+    {"ordinal": 3, "id": "MUT-03-FAIL-OPEN-UNKNOWN", "family": "FAIL_OPEN_UNKNOWN", "cell": "UNKNOWN_TUPLE", "changed_semantic_edge": "claim:unknown-complete->unknown-incomplete", "operator": "erase_unknown_tuple_fields", "expected_detector": "UNKNOWN_TUPLE_INCOMPLETE"},
+    {"ordinal": 4, "id": "MUT-04-DENOMINATOR-DELETION", "family": "DENOMINATOR_DELETION", "cell": "DENOMINATOR_IMMUTABILITY", "changed_semantic_edge": "denominator:12->11", "operator": "delete_declared_cell", "expected_detector": "DENOMINATOR_DELETION_REJECTED"},
+    {"ordinal": 5, "id": "MUT-05-AUTHORITY-ESCALATION", "family": "AUTHORITY_ESCALATION", "cell": "AUTHORITY_BOUNDARY", "changed_semantic_edge": "authority:zero->write", "operator": "enable_repository_write", "expected_detector": "AUTHORITY_ESCALATION_REJECTED"},
+    {"ordinal": 6, "id": "MUT-06-STALE-EVIDENCE", "family": "STALE_EVIDENCE", "cell": "EVIDENCE_FRESHNESS", "changed_semantic_edge": "evidence:command-digest->missing", "operator": "erase_freshness_digest", "expected_detector": "EXACT_FRESHNESS_EVIDENCE_REQUIRED"},
+    {"ordinal": 7, "id": "MUT-07-DIGEST-MISMATCH", "family": "DIGEST_MISMATCH", "cell": "ARTIFACT_DIGEST", "changed_semantic_edge": "artifact:verified->tampered", "operator": "replace_artifact_digest", "expected_detector": "ARTIFACT_DIGEST_MISMATCH"},
+    {"ordinal": 8, "id": "MUT-08-EDGE-REMOVAL", "family": "DEPENDENCY_EDGE_REMOVAL", "cell": "DEPENDENCY_EDGE", "changed_semantic_edge": "cell:predecessor->removed", "operator": "remove_dependency_edge", "expected_detector": "SEMANTIC_EDGE_REMOVED"},
+    {"ordinal": 9, "id": "MUT-09-SOURCE-IR-DRIFT", "family": "SOURCE_IR_DRIFT", "cell": "SOURCE_IR_BINDING", "changed_semantic_edge": "source:declared->drifted", "operator": "drift_source_ir_binding", "expected_detector": "SOURCE_IR_BINDING_MISMATCH"},
+    {"ordinal": 10, "id": "MUT-10-ARTIFACT-SUBSTITUTION", "family": "ARTIFACT_SUBSTITUTION", "cell": "ARTIFACT_IDENTITY", "changed_semantic_edge": "artifact:target->other", "operator": "substitute_artifact_binding", "expected_detector": "ARTIFACT_IDENTITY_MISMATCH"},
+    {"ordinal": 11, "id": "MUT-11-UNKNOWN-FRONTIER", "family": "UNKNOWN_FRONTIER_LOSS", "cell": "UNKNOWN_FRONTIER", "changed_semantic_edge": "unknown:blocked_by->empty", "operator": "erase_unknown_frontier", "expected_detector": "UNKNOWN_FRONTIER_INCOMPLETE"},
+    {"ordinal": 12, "id": "MUT-12-REFUTATION-PRECEDENCE", "family": "REFUTATION_PRECEDENCE_INVERSION", "cell": "REFUTATION_PRECEDENCE", "changed_semantic_edge": "refuted:priority->unknown", "operator": "invert_resolution_precedence", "expected_detector": "REFUTATION_PRECEDENCE_INVERTED"}
+  ]
+}
