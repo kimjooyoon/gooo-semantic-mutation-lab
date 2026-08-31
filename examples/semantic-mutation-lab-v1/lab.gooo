@@ -29,4 +29,4 @@ mutation ordinal=8 id=MUT-08-EDGE-REMOVAL family=DEPENDENCY_EDGE_REMOVAL cell=DE
 mutation ordinal=9 id=MUT-09-SOURCE-IR-DRIFT family=SOURCE_IR_DRIFT cell=SOURCE_IR_BINDING edge=source:declared->drifted operator=drift_source_ir_binding detector=SOURCE_IR_BINDING_MISMATCH
 mutation ordinal=10 id=MUT-10-ARTIFACT-SUBSTITUTION family=ARTIFACT_SUBSTITUTION cell=ARTIFACT_IDENTITY edge=artifact:target->other operator=substitute_artifact_binding detector=ARTIFACT_IDENTITY_MISMATCH
 mutation ordinal=11 id=MUT-11-UNKNOWN-FRONTIER family=UNKNOWN_FRONTIER_LOSS cell=UNKNOWN_FRONTIER edge=unknown:blocked_by->empty operator=erase_unknown_frontier detector=UNKNOWN_FRONTIER_INCOMPLETE
-mutation ordinal=12 id=MUT-12-REFUTATION-PRECEDENCE family=REFUTATION_PRECEDENCE_INVERSION cell=REFUTATION_PRECEDENCE edge=REFUTED>UNKNOWN->UNKNOWN>REFUTED operator=invert_resolution_precedence detector=REFUTATION_PRECEDENCE_INVERTED
+mutation ordinal=12 id=MUT-12-REFUTATION-PRECEDENCE family=REFUTATION_PRECEDENCE_INVERSION cell=REFUTATION_PRECEDENCE edge=refuted:priority->unknown operator=invert_resolution_precedence detector=REFUTATION_PRECEDENCE_INVERTED
