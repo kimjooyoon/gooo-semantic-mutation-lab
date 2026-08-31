@@ -17,7 +17,7 @@ func main() {
 	case "run":
 		run(os.Args[2:])
 	default:
-		fatal("unknown command %q", os.Args[1])
+		fatal(fmt.Sprintf("unknown command %q", os.Args[1]))
 	}
 }
 
