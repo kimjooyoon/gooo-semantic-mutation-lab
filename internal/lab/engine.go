@@ -186,7 +186,7 @@ func cloneState(base SemanticState) SemanticState {
 	copyState := base
 	copyState.DenominatorCellIDs = append([]string(nil), base.DenominatorCellIDs...)
 	copyState.Precedence = append([]string(nil), base.Precedence...)
-	copyState.Dependencies = cloneStringMap(base.Dependencies)
+	copyState.Dependencies = cloneStringSlices(base.Dependencies)
 	copyState.SourceIRBindings = cloneStringMap(base.SourceIRBindings)
 	copyState.ArtifactBindings = cloneStringMap(base.ArtifactBindings)
 	copyState.Decisions = cloneStringMap(base.Decisions)
@@ -206,6 +206,14 @@ func cloneStringMap(input map[string]string) map[string]string {
 	output := make(map[string]string, len(input))
 	for key, value := range input {
 		output[key] = value
+	}
+	return output
+}
+
+func cloneStringSlices(input map[string][]string) map[string][]string {
+	output := make(map[string][]string, len(input))
+	for key, value := range input {
+		output[key] = append([]string(nil), value...)
 	}
 	return output
 }
