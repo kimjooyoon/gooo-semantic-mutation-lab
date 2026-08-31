@@ -89,7 +89,7 @@ type SemanticState struct {
 	Decisions           map[string]string   `json:"decisions"`
 	Claims              map[string]Claim    `json:"claims"`
 	Evidence            map[string]Evidence `json:"evidence"`
-	Authority           Authority           `json:"authority"`
+	Authority          Authority           `json:"authority"`
 	Attestation         string              `json:"attestation"`
 	Precedence          []string            `json:"precedence"`
 }
