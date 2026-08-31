@@ -1,0 +1,23 @@
+{
+  "schema": "gooo/semantic-mutation-lab/conflict-recovery/v1",
+  "owner_thread_id": "01a0558a-d2a9-7e42-8bae-3f5e34155c29",
+  "source_head": "991fd34",
+  "canonical_cli": "cmd/gooo-semantic-mutation-lab",
+  "canonical_engine": "internal/lab/parse.go,internal/lab/canonical.go,internal/lab/engine.go,internal/lab/report.go,internal/lab/render.go",
+  "preserved_semantics": [
+    "declared .gooo source to semantic IR",
+    "caller-owned mutant artifacts",
+    "generation receipt",
+    "deterministic replay",
+    "exact-count human summary",
+    "REFUTED over UNKNOWN precedence"
+  ],
+  "removed_duplicates": [
+    "cmd/mutationlab",
+    "internal/lab/run.go",
+    "internal/lab/lab_test.go",
+    ".github/workflows/ci.yml"
+  ],
+  "unexpected_changes_after_recovery": false,
+  "local_go_verification": "not_run"
+}

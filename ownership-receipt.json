@@ -1,0 +1,6 @@
+{
+  "schema": "gooo/semantic-mutation-lab/ownership-receipt/v1",
+  "owner_thread_id": "01a0558a-d2a9-7e42-8bae-3f5e34155c29",
+  "scope": "complete repository: source, semantic IR, caller-owned mutant artifacts, evaluator, report, CI, PR, and immutable v0.1.0 release",
+  "unexpected_change_policy": "stop and report exact paths"
+}

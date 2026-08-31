@@ -1,0 +1,32 @@
+gooo semantic_mutation_lab v1
+
+denominator id=semantic-mutation-lab-v1 cell_count=12
+authority repository_writes=0 local_test_executions=0 cross_project_required_gates=0
+precedence REFUTED>UNKNOWN>CLOSED
+unknown_fields stage,step,reason,unknown_class,next_operation,blocked_by
+
+cell ordinal=1 id=SELF_ATTESTATION edge=attestation:independent->evaluator depends_on=-
+cell ordinal=2 id=FIXED_POINT_GUARD edge=decision:fixed_point->evaluator depends_on=SELF_ATTESTATION
+cell ordinal=3 id=UNKNOWN_TUPLE edge=claim:unknown->resolution depends_on=FIXED_POINT_GUARD
+cell ordinal=4 id=DENOMINATOR_IMMUTABILITY edge=denominator:declared->run depends_on=UNKNOWN_TUPLE
+cell ordinal=5 id=AUTHORITY_BOUNDARY edge=authority:zero->operation depends_on=DENOMINATOR_IMMUTABILITY
+cell ordinal=6 id=EVIDENCE_FRESHNESS edge=evidence:current->evaluation depends_on=AUTHORITY_BOUNDARY
+cell ordinal=7 id=ARTIFACT_DIGEST edge=artifact:bytes->digest depends_on=EVIDENCE_FRESHNESS
+cell ordinal=8 id=DEPENDENCY_EDGE edge=cell:predecessor->successor depends_on=ARTIFACT_DIGEST
+cell ordinal=9 id=SOURCE_IR_BINDING edge=source:semantic->ir depends_on=DEPENDENCY_EDGE
+cell ordinal=10 id=ARTIFACT_IDENTITY edge=ir:mutant->artifact depends_on=SOURCE_IR_BINDING
+cell ordinal=11 id=UNKNOWN_FRONTIER edge=dependency:frontier->unknown depends_on=ARTIFACT_IDENTITY
+cell ordinal=12 id=REFUTATION_PRECEDENCE edge=refuted:priority->unknown depends_on=UNKNOWN_FRONTIER
+
+mutation ordinal=1 id=MUT-01-SELF-ATTESTATION family=SELF_ATTESTATION cell=SELF_ATTESTATION edge=attestation:independent->mutant-self operator=replace_independent_attestation detector=SELF_ATTESTATION_NOT_AUTHORITY
+mutation ordinal=2 id=MUT-02-FIXED-POINT family=FIXED_POINT_ABUSE cell=FIXED_POINT_GUARD edge=decision:closed->fixed_point operator=replace_decision_with_fixed_point detector=FIXED_POINT_DECISION_REJECTED
+mutation ordinal=3 id=MUT-03-FAIL-OPEN-UNKNOWN family=FAIL_OPEN_UNKNOWN cell=UNKNOWN_TUPLE edge=claim:unknown-complete->unknown-incomplete operator=erase_unknown_tuple_fields detector=UNKNOWN_TUPLE_INCOMPLETE
+mutation ordinal=4 id=MUT-04-DENOMINATOR-DELETION family=DENOMINATOR_DELETION cell=DENOMINATOR_IMMUTABILITY edge=denominator:12->11 operator=delete_declared_cell detector=DENOMINATOR_DELETION_REJECTED
+mutation ordinal=5 id=MUT-05-AUTHORITY-ESCALATION family=AUTHORITY_ESCALATION cell=AUTHORITY_BOUNDARY edge=authority:zero->write operator=enable_repository_write detector=AUTHORITY_ESCALATION_REJECTED
+mutation ordinal=6 id=MUT-06-STALE-EVIDENCE family=STALE_EVIDENCE cell=EVIDENCE_FRESHNESS edge=evidence:command-digest->missing operator=erase_freshness_digest detector=EXACT_FRESHNESS_EVIDENCE_REQUIRED
+mutation ordinal=7 id=MUT-07-DIGEST-MISMATCH family=DIGEST_MISMATCH cell=ARTIFACT_DIGEST edge=artifact:verified->tampered operator=replace_artifact_digest detector=ARTIFACT_DIGEST_MISMATCH
+mutation ordinal=8 id=MUT-08-EDGE-REMOVAL family=DEPENDENCY_EDGE_REMOVAL cell=DEPENDENCY_EDGE edge=cell:predecessor->removed operator=remove_dependency_edge detector=SEMANTIC_EDGE_REMOVED
+mutation ordinal=9 id=MUT-09-SOURCE-IR-DRIFT family=SOURCE_IR_DRIFT cell=SOURCE_IR_BINDING edge=source:declared->drifted operator=drift_source_ir_binding detector=SOURCE_IR_BINDING_MISMATCH
+mutation ordinal=10 id=MUT-10-ARTIFACT-SUBSTITUTION family=ARTIFACT_SUBSTITUTION cell=ARTIFACT_IDENTITY edge=artifact:target->other operator=substitute_artifact_binding detector=ARTIFACT_IDENTITY_MISMATCH
+mutation ordinal=11 id=MUT-11-UNKNOWN-FRONTIER family=UNKNOWN_FRONTIER_LOSS cell=UNKNOWN_FRONTIER edge=unknown:blocked_by->empty operator=erase_unknown_frontier detector=UNKNOWN_FRONTIER_INCOMPLETE
+mutation ordinal=12 id=MUT-12-REFUTATION-PRECEDENCE family=REFUTATION_PRECEDENCE_INVERSION cell=REFUTATION_PRECEDENCE edge=REFUTED>UNKNOWN->UNKNOWN>REFUTED operator=invert_resolution_precedence detector=REFUTATION_PRECEDENCE_INVERTED
