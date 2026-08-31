@@ -20,7 +20,7 @@ func TestRunProducesFixedCountsAndExplicitUnknown(t *testing.T) {
 		t.Fatalf("unexpected summary: %+v", report.Summary)
 	}
 	for _, mutant := range report.Mutants {
-		if mutant.State == "UNKNOWN" && !mutant.Claim.HasUnknownTuple() {
+		if mutant.State == "SURVIVED_UNKNOWN" && !mutant.Claim.HasUnknownTuple() {
 			t.Fatalf("unknown claim is incomplete: %+v", mutant.Claim)
 		}
 	}
