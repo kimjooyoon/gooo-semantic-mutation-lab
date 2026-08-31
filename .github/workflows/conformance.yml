@@ -32,8 +32,6 @@ jobs:
         run: |
           set -euo pipefail
           files=$(gofmt -l $(git ls-files '*.go'))
-          echo "gofmt files: $files"
-          if test -n "$files"; then gofmt -d $files; fi
           test -z "$files"
 
       - name: Verify vet

@@ -84,14 +84,14 @@ type Contract struct {
 type SemanticState struct {
 	DenominatorCellIDs []string            `json:"denominator_cell_ids"`
 	Dependencies       map[string][]string `json:"dependencies"`
-	SourceIRBindings    map[string]string   `json:"source_ir_bindings"`
-	ArtifactBindings    map[string]string   `json:"artifact_bindings"`
-	Decisions           map[string]string   `json:"decisions"`
-	Claims              map[string]Claim    `json:"claims"`
-	Evidence            map[string]Evidence `json:"evidence"`
+	SourceIRBindings   map[string]string   `json:"source_ir_bindings"`
+	ArtifactBindings   map[string]string   `json:"artifact_bindings"`
+	Decisions          map[string]string   `json:"decisions"`
+	Claims             map[string]Claim    `json:"claims"`
+	Evidence           map[string]Evidence `json:"evidence"`
 	Authority          Authority           `json:"authority"`
-	Attestation         string              `json:"attestation"`
-	Precedence          []string            `json:"precedence"`
+	Attestation        string              `json:"attestation"`
+	Precedence         []string            `json:"precedence"`
 }
 
 type IR struct {
